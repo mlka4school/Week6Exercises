@@ -27,22 +27,26 @@ namespace SimpleCalc
 		public MainWindow()
 		{
 			InitializeComponent();
-			LabelSum.Content = "This is a test";
+			//LabelSum.Content = "This is a test";
 		}
 
 		private void Math0_Click(object sender, RoutedEventArgs e)
 		{
-			if (currentValue != "0"){
-				currentValue += "0";
+			if (!isError){
+				if (currentValue != "0"){
+					currentValue += "0";
+				}
 			}
 			UpdateWindow();
 		}
 
 		private void MathDec_Click(object sender, RoutedEventArgs e)
 		{
-			if (currentValue != "0"){
-				currentValue = currentValue.Replace(".","");
-				currentValue = currentValue+".";
+			if (!isError){
+				if (currentValue != "0"){
+					currentValue = currentValue.Replace(".","");
+					currentValue = currentValue+".";
+				}
 			}
 			UpdateWindow();
 		}
@@ -104,12 +108,14 @@ namespace SimpleCalc
 
 		private void MathCalc_Click(object sender, RoutedEventArgs e)
 		{
-			var final = queueValue+queueOperation+currentValue+" = ";
-			currentValue = GetSum();
-			queueValue = "";
-			queueOperation = "";
-			UpdateWindow();
-			LabelSum.Content = final;
+			if (!isError){
+				var final = queueValue+queueOperation+currentValue+" = ";
+				currentValue = GetSum();
+				queueValue = "";
+				queueOperation = "";
+				UpdateWindow();
+				LabelSum.Content = final;
+			}
 		}
 
 		private void MathPlus_Click(object sender, RoutedEventArgs e)
@@ -137,40 +143,47 @@ namespace SimpleCalc
 			currentValue = "0";
 			queueValue = "";
 			queueOperation = "";
+			isError = false;
+			LabelSum.Content = "";
 			UpdateWindow();
 		}
 
 		private void MathCE_Click(object sender, RoutedEventArgs e)
 		{
-			currentValue = "0";
+			if (!isError){
+				currentValue = "0";
+			}
 			UpdateWindow();
 		}
 
 		private void MathRev_Click(object sender, RoutedEventArgs e)
 		{
-			if (currentValue != "0"){
-				if (currentValue[0].ToString() == "-"){
-					currentValue = currentValue.Remove(0,1);
-				}else{
-					currentValue = "-"+currentValue;
+			if (!isError){
+				if (currentValue != "0"){
+					if (currentValue[0].ToString() == "-"){
+						currentValue = currentValue.Remove(0,1);
+					}else{
+						currentValue = "-"+currentValue;
+					}
 				}
 			}
 			UpdateWindow();
 		}
 
 		public void TryOperation(string op){
-			if (queueOperation != ""){
-				// do that first
-				queueValue = GetSum();
-			}else{
-				queueValue = currentValue;
+			if (!isError){
+				if (queueOperation != ""){
+					// do that first
+					queueValue = GetSum();
+				}else{
+					queueValue = currentValue;
+				}
+				// now continue. clear the currentValue and prepare for a new one
+				currentValue = "0";
+				queueOperation = op;
+				LabelSum.Content = queueValue+queueOperation;
 			}
-			// now continue. clear the currentValue and prepare for a new one
-			currentValue = "0";
-			queueOperation = op;
-			LabelSum.Content = queueValue+queueOperation;
 			UpdateWindow();
-
 		}
 
 		public string GetSum(){
@@ -189,7 +202,11 @@ namespace SimpleCalc
 						sum = val1*val2;
 					break;
 					case "/":
+						// surprisingly div by 0 does not crash. so we'll just cause an error if val2 is 0
 						sum = val1/val2;
+						if (val2 == 0){
+							isError = true;
+						}
 					break;
 				}
 
@@ -200,10 +217,12 @@ namespace SimpleCalc
 		}
 
 		public void TryValue(string val){
-			if (currentValue == "0"){
-				currentValue = val;
-			}else{
-				currentValue += val;
+			if (!isError){
+				if (currentValue == "0"){
+					currentValue = val;
+				}else{
+					currentValue += val;
+				}
 			}
 		}
 
