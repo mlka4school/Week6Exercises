@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentManage"
         mc:Ignorable="d"
-        Title="ChangeWindow" Height="240" Width="310">
+        Title="ChangeWindow" Height="298" Width="310">
     <Grid>
-        <Button x:Name="DoneButton" Content="Done" Margin="19,0,19,10" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="DoneButton" Content="Done" Margin="19,0,19,10" Height="20" VerticalAlignment="Bottom" Click="DoneButton_Click"/>
         <Label Content="Student ID" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="IDTBox" Margin="10,36,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Label Content="First Name" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="FirstTBox" Margin="10,84,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Label Content="Last Name" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="LastTBox" Margin="10,140,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Label x:Name="ErrorLabel" Content="" HorizontalAlignment="Center" Margin="0,0,0,35" Width="290" Height="26" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

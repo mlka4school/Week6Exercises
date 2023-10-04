@@ -24,5 +24,30 @@ namespace StudentManage
         {
             InitializeComponent();
         }
+
+		private void DoneButton_Click(object sender, RoutedEventArgs e)
+		{
+			var mainWin = (MainWindow)Application.Current.MainWindow;
+			if (modifyMode){
+				mainWin.UpdateStudent(FirstTBox.Text,LastTBox.Text,Convert.ToInt32(IDTBox.Text));
+				//Close();
+			}else{
+				var real = 0;
+				if (!int.TryParse(IDTBox.Text,out real) || FirstTBox.Text == "" || LastTBox.Text == ""){ // don't ask why i use tryparse like this. it just works
+					ErrorLabel.Content = "Fields are incorrect";
+					return;
+				}
+				var attempt = mainWin.AddStudent(FirstTBox.Text,LastTBox.Text,Convert.ToInt32(IDTBox.Text));
+				if (attempt == "-1"){
+					Close();
+				}else{
+					ErrorLabel.Content = attempt;
+				}
+			}
+		}
+
+		public void BoxInit(){
+			if (modifyMode) IDTBox.IsEnabled = false;
+		}
 	}
 }
